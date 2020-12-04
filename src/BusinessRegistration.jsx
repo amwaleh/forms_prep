@@ -15,7 +15,8 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 
 const useStyles = makeStyles((theme) => ({
   formBody: {
-    display: "flex"
+    display: "flex",
+    flexFlow: "row"
   },
   field: {
     padding: "10px"
@@ -152,15 +153,16 @@ export default function BasicTextFields() {
                 {/* Are you a  */}
                 <FormLabel component="legend">Are you a </FormLabel>
                 <RadioGroup
-                  aria-label="Wholeseller_retailer"
-                  name="Wholeseller_retailer"
-                  value={values["Wholeseller_retailer"]}
+                  className={classes.formBody}
+                  aria-label="Wholesale_retailer"
+                  name="Wholesale_retailer"
+                  value={values["Wholesale_retailer"]}
                   onChange={handleChange}
                 >
                   <FormControlLabel
-                    value="Wholesaler"
+                    value="Wholesale Producer"
                     control={<Radio />}
-                    label="Wholeseller"
+                    label="Wholesale Producer"
                   />
                   <FormControlLabel
                     value="Retailer"
@@ -176,11 +178,12 @@ export default function BasicTextFields() {
               </FormControl>
             </Grid>
 
-            <Grid item md={12}>
+            {values?.Wholesale_retailer && values?.Wholesale_retailer !== 'Wholesale Producer' && <Grid item md={12}>
               <FormControl component="fieldset">
                 {/* Are you a /an */}
                 <FormLabel component="legend">Are you a /an</FormLabel>
                 <RadioGroup
+                  className={classes.formBody}
                   aria-label="scale"
                   name="scale"
                   value={values["scale"]}
@@ -203,7 +206,7 @@ export default function BasicTextFields() {
                   />
                 </RadioGroup>
               </FormControl>
-            </Grid>
+            </Grid>}
             {/* Do you have in-house designer or design team */}
 
             <Grid container item md={12} direction="column">
@@ -212,6 +215,7 @@ export default function BasicTextFields() {
                   Do you have in-house designer or design team{" "}
                 </FormLabel>
                 <RadioGroup
+                  className={classes.formBody}
                   aria-label="Design"
                   name="in_house_design_team"
                   value={values["in_house_design_team"]}
@@ -233,6 +237,7 @@ export default function BasicTextFields() {
                   Is your manufacturing done in-house or is it out sourced?{" "}
                 </FormLabel>
                 <RadioGroup
+                  className={classes.formBody}
                   aria-label="Design"
                   name="Manufacturing"
                   value={values["Manufacturing"]}
@@ -267,6 +272,7 @@ export default function BasicTextFields() {
                     Do you have experience exporting{" "}
                   </FormLabel>
                   <RadioGroup
+                    className={classes.formBody}
                     aria-label=""
                     name="Export_experience"
                     value={values["Export_experience"]}
@@ -287,44 +293,49 @@ export default function BasicTextFields() {
               </Grid>
             </Grid>
 
-            <Grid item sm={12}>
-              <FormControl component="fieldset">
-                {/* Are you a /an */}
-                <FormLabel component="legend">Are you a /an</FormLabel>
-                <RadioGroup
-                  aria-label="scale"
-                  name="Exporter"
-                  value={values["Exporter"]}
-                  onChange={handleChange}
-                >
-                  <FormControlLabel
-                    value="Mainstream Exporter"
-                    control={<Radio />}
-                    label="Mainstream Exporter"
+            {values?.Export_experience === "Yes" && (
+              <>
+                <Grid item sm={12}>
+                  <FormControl component="fieldset">
+                    {/* Are you a /an */}
+                    <FormLabel component="legend">Are you a /an</FormLabel>
+                    <RadioGroup
+                      className={classes.formBody}
+                      aria-label="scale"
+                      name="Exporter"
+                      value={values["Exporter"]}
+                      onChange={handleChange}
+                    >
+                      <FormControlLabel
+                        value="Mainstream Exporter"
+                        control={<Radio />}
+                        label="Mainstream Exporter"
+                      />
+                      <FormControlLabel
+                        value="Small scale Exporter"
+                        control={<Radio />}
+                        label="Small scale exporter"
+                      />
+                      <FormControlLabel
+                        value="Large Scale Exporter"
+                        control={<Radio />}
+                        label="Large Scale exporter"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                <Grid item sm={12}>
+                  <TextField
+                    name="brands_exported"
+                    label={
+                      "Please share names of brands you have exported in the past"
+                    }
+                    fullWidth
+                    onChange={handleChange}
                   />
-                  <FormControlLabel
-                    value="Small scale Exporter"
-                    control={<Radio />}
-                    label="Small scale exporter"
-                  />
-                  <FormControlLabel
-                    value="Large Scale Exporter"
-                    control={<Radio />}
-                    label="Large Scale exporter"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-            <Grid item sm={12}>
-              <TextField
-                name="brands_exported"
-                label={
-                  "Please share names of brands you have exported in the past"
-                }
-                fullWidth
-                onChange={handleChange}
-              />
-            </Grid>
+                </Grid>
+              </>
+            )}
           </Grid>
 
           <Grid container item md={8} direction="row-reverse">
