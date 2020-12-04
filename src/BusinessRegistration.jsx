@@ -16,7 +16,8 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 const useStyles = makeStyles((theme) => ({
   formBody: {
     display: "flex",
-    flexFlow: "row"
+    flexFlow: "row",
+margin:"5px 0 15px 0"
   },
   field: {
     padding: "10px"
@@ -43,7 +44,7 @@ export default function BasicTextFields() {
   const classes = useStyles();
   const niche = [
     "Home Furnishing",
-    "Jewelry",
+    "Jewelery",
     "Textiles",
     "Apparel",
     "Furniture",
@@ -117,10 +118,11 @@ export default function BasicTextFields() {
                   What product category do yoiu operate in? (Check all that
                   apply)?
                 </FormLabel>
-                <Grid component={FormGroup} container sm={12}>
+                <Grid component={FormGroup} container sm={12} style={{flexFlow: "row", flexWrap: "wrap"}} >
                   {niche.map((n, idx) => (
                     <Grid
                       component={FormControlLabel}
+                      style={{marginRight: 0}}
                       item
                       sm={6}
                       id={idx}
@@ -261,7 +263,7 @@ export default function BasicTextFields() {
                 </RadioGroup>
               </FormControl>
             </Grid>
-          </Grid>
+          
           {/* Export experience */}
           <Grid container>
             <Grid item>
@@ -298,7 +300,7 @@ export default function BasicTextFields() {
                 <Grid item sm={12}>
                   <FormControl component="fieldset">
                     {/* Are you a /an */}
-                    <FormLabel component="legend">Are you a /an</FormLabel>
+                    <FormLabel component="legend">Are you a </FormLabel>
                     <RadioGroup
                       className={classes.formBody}
                       aria-label="scale"
@@ -337,7 +339,7 @@ export default function BasicTextFields() {
               </>
             )}
           </Grid>
-
+          </Grid>
           <Grid container item md={8} direction="row-reverse">
             <Button color="primary" variant="outlined" type="submit">
               Submit{" "}
