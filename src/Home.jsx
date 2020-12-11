@@ -4,8 +4,9 @@ import app from "./base";
 const Home = props => {
   return (
     <>
-      <h1>Home {props.user.email}</h1>
-      <button onClick={() => app.auth().signOut()}>Sign out</button>
+
+      <h1>Home </h1>
+      
     </>
   );
 };
