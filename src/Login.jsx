@@ -6,16 +6,29 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
 import { withRouter, Redirect } from "react-router";
 import app from "./base.js";
 import { AuthContext } from "./Auth.js";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
 
 const useStyles = makeStyles((theme) => ({
   formBody: {
-    display: "flex"
+    display: "flex",
+    minHeight: "100vh"
   },
   field: {
     padding: "10px"
+  },
+  header: {
+    backgroundColor: "#0c3c5a",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "0.5rem",
+    color: "#FFF",
+    marginBottom: "1rem"
   }
 }));
 const Fields = [
@@ -31,17 +44,12 @@ const Fields = [
     required: true
   }
 ];
-const Login = props =>  {
+const Login = (props) => {
   const classes = useStyles();
-  // const [values, setValue] = React.useState({});
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   const newValues = { ...values, [name]: value };
-  //   setValue(newValues);
-  // };
- const {history } = props
+
+  const { history } = props;
   const handleSubmit = useCallback(
-    async event => {
+    async (event) => {
       event.preventDefault();
       const { email, password } = event.target.elements;
       try {
@@ -55,38 +63,49 @@ const Login = props =>  {
     },
     [history]
   );
-  
+
   return (
     <Container maxWidth="md">
-      <Typography variant="subtitle1"> Sign up as a Producer</Typography>
-      <form
-        noValidate
-        autoComplete="off"
+      <Grid
+        container
         className={classes.formBody}
-        onSubmit={handleSubmit}
-      >
-        <Grid container spacing={4}>
-          {Fields.map((field) => (
-            <Grid item md={8}>
-              <TextField
-                required={field?.required}
-                name={field.name}
-                label={field.label}
-                type={field?.type}
-                fullWidth
-                // onChange={handleChange}
-              />
-            </Grid>
-          ))}
-          <Grid container item md={8} direction="row-reverse">
-            <Button color="primary" variant="outlined" type="submit">
-              Submit{" "}
-            </Button>
-          </Grid>
+        justify="center"
+        alignItems="center"
         
+      >
+        <Grid conatiner item md="6" sm="12" justify="center" component={Paper} spacing="4" style={{padding:"20px"}}>
+          <Paper className={classes.header} elevation='0'>
+            <Typography variant="h6"> Sign in</Typography>
+          </Paper>
+          <form
+            noValidate
+            autoComplete="off"
+            // className={classes.formBody}
+            onSubmit={handleSubmit}
+          >
+            <Grid container spacing={4} sm="12" >
+              {Fields.map((field) => (
+                <Grid item sm="12">
+                  <TextField
+                    required={field?.required}
+                    name={field.name}
+                    label={field.label}
+                    type={field?.type}
+                    fullWidth
+                    // onChange={handleChange}
+                  />
+                </Grid>
+              ))}
+              <Grid container item md={12} direction="row-reverse">
+                <Button color="primary" variant="outlined" type="submit">
+                  Submit{" "}
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
         </Grid>
-      </form>
+      </Grid>
     </Container>
   );
-}
-export default withRouter(Login)
+};
+export default withRouter(Login);

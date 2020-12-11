@@ -12,8 +12,13 @@ import Avatar from "@material-ui/core/Avatar";
 import Container from "@material-ui/core/Container";
 
 const useStyles = makeStyles({
-  table: {
-    Width: 300
+  body: {
+  
+    minHeight: "100vh",
+    marginTop:"2rem",
+    display: "flex",
+    justifyContent: "center",
+    paddingTop:"2rem"
   },
   large: {
     width: "100px",
@@ -28,50 +33,57 @@ export default function DenseTable(props) {
 
   return (
     <Container maxwidth="lg">
-    <TableContainer component={Paper}>
-      <Table className={classes.table} size="small" >
+      <TableContainer component={Paper} container className={classes.body} justify="center">
+        <Table size="small" style={{width:"500px"}}>
         <TableHead>
           <TableRow>
-            <TableCell>
-              {userDetails?.photoUrl ? (
-                <Image
-                  src={userDetails?.photoUrl || ""}
-                  onClick={() => console.log("onClick")}
-                  aspectRatio={16 / 9}
-                  disableSpinner
-                />
-              ):  <Avatar
-              alt="profile"
-              src="/broken-image.jpg"
-              className={classes.large}
-            >
-              {userDetails.email[0].toUpperCase()}
-            </Avatar>}
-            </TableCell>
+            <TableCell>User Information</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
           <TableRow>
-            <TableCell component="th" scope="row">
-              Email
-            </TableCell>
-            <TableCell align="center">{userDetails.email}</TableCell>
+            <TableRow>
+              <TableCell colSpan="2">
+                {userDetails?.photoUrl ? (
+                  <Image
+                    src={userDetails?.photoUrl || ""}
+                    onClick={() => console.log("onClick")}
+                    aspectRatio={16 / 9}
+                    disableSpinner
+                  />
+                ) : (
+                  <Avatar
+                    alt="profile"
+                    src="/broken-image.jpg"
+                    className={classes.large}
+                  >
+                    {userDetails.email[0].toUpperCase()}
+                  </Avatar>
+                )}
+              </TableCell>
+            </TableRow>
           </TableRow>
-          <TableRow>
-            <TableCell component="th" scope="row">
-              Name
-            </TableCell>
-            <TableCell align="center">{userDetails.displayName}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell component="th" scope="row">
-              Phone
-            </TableCell>
-            <TableCell align="center">{userDetails.phoneNumber}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </Container >
+          <TableBody>
+            <TableRow>
+              <TableCell component="th" scope="row">
+                Email
+              </TableCell>
+              <TableCell align="center">{userDetails.email}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell component="th" scope="row">
+                Name
+              </TableCell>
+              <TableCell align="center">{userDetails.displayName}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell component="th" scope="row">
+                Phone
+              </TableCell>
+              <TableCell align="center">{userDetails.phoneNumber}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 }
