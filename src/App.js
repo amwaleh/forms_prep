@@ -1,11 +1,24 @@
 import React from "react";
 import "./styles.css";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Home from "./Home";
+import Login from "./Login";
+import SignUp from "./SignupForm";
+import { AuthProvider } from "./Auth";
+import PrivateRoute from "./PrivateRoute";
 
-export default function App() {
+const App = () => {
   return (
-    <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <h2>Start editing to see some magic happen!</h2>
-    </div>
+    <AuthProvider>
+      <Router>
+        <div>
+          <PrivateRoute exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={SignUp} />
+        </div>
+      </Router>
+    </AuthProvider>
   );
-}
+};
+
+export default App;

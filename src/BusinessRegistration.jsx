@@ -21,7 +21,8 @@ margin:"5px 0 15px 0"
   },
   field: {
     padding: "10px"
-  }
+  },
+formSpacing:{ marginTop:'2rem'}
 }));
 const Fields = [
   {
@@ -112,7 +113,7 @@ export default function BasicTextFields() {
             </Grid>
             {/* What product category do yoiu operate in? (Check all that
                   apply)? */}
-            <Grid item md={12}>
+            <Grid item md={12} className={classes.formSpacing}>
               <FormControl component="fieldset" className={classes.formControl}>
                 <FormLabel component="legend">
                   What product category do yoiu operate in? (Check all that
@@ -141,7 +142,7 @@ export default function BasicTextFields() {
               </FormControl>
             </Grid>
 
-            <Grid item md={12}>
+            <Grid item md={12} className={classes.formSpacing}>
               <TextField
                 required
                 name="Craft_technique"
@@ -150,7 +151,7 @@ export default function BasicTextFields() {
                 onChange={handleChange}
               />
             </Grid>
-            <Grid item md={12}>
+            <Grid item md={12} className={classes.formSpacing}>
               <FormControl component="fieldset">
                 {/* Are you a  */}
                 <FormLabel component="legend">Are you a </FormLabel>
@@ -158,7 +159,7 @@ export default function BasicTextFields() {
                   className={classes.formBody}
                   aria-label="Wholesale_retailer"
                   name="Wholesale_retailer"
-                  value={values["Wholesale_retailer"]}
+                  value={values["Wholesale_retailer"]||''}
                   onChange={handleChange}
                 >
                   <FormControlLabel
@@ -188,7 +189,7 @@ export default function BasicTextFields() {
                   className={classes.formBody}
                   aria-label="scale"
                   name="scale"
-                  value={values["scale"]}
+                  value={values["scale"] || ''}
                   onChange={handleChange}
                 >
                   <FormControlLabel

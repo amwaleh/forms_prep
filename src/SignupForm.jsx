@@ -2,10 +2,11 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import * as firebase from "firebase/app";
+import "firebase/auth";
 
 const useStyles = makeStyles((theme) => ({
   formBody: {
@@ -29,7 +30,7 @@ const Fields = [
   {
     name: "password",
     label: "password",
-    type:"password",
+    type: "password",
     required: true
   },
   {
@@ -69,11 +70,29 @@ export default function BasicTextFields() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(values);
-  };
+const {email, password} = values 
+    firebase
+    .auth()
+      .createUserWithEmailAndPassword(email, password)
+      // .then(({ user }) => {
+      //   return user.getIdToken().then((idToken) => {
+      //     return fetch("/sessionLogin", {
+      //       method: "POST",
+      //       headers: {
+      //         Accept: "application/json",
+      //         "Content-Type": "application/json",
+      //         "CSRF-Token": Cookies.get("XSRF-TOKEN")
+      //       },
+      //       body: JSON.stringify({ idToken })
+      //     });
+      //   });
+      // })
+      .then((user) => {console.log(user)})
+      .catch(error => {console.log(error.message)})
+  }
   return (
     <Container maxWidth="md">
-      <Typography variant="h3"> Sign up as a Producer</Typography>
+      <Typography variant="subtitle1"> Sign up as a Producer</Typography>
       <form
         noValidate
         autoComplete="off"
