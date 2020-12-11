@@ -1,10 +1,10 @@
 import React from "react";
 import app from "./base";
 
-const Home = () => {
+const Home = props => {
   return (
     <>
-      <h1>Home</h1>
+      <h1>Home {props.user.email}</h1>
       <button onClick={() => app.auth().signOut()}>Sign out</button>
     </>
   );

@@ -74,7 +74,7 @@ const Login = props =>  {
                 label={field.label}
                 type={field?.type}
                 fullWidth
-                onChange={handleChange}
+                // onChange={handleChange}
               />
             </Grid>
           ))}
