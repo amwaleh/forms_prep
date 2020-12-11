@@ -11,7 +11,7 @@ import { withRouter, Redirect } from "react-router";
 import app from "./base.js";
 import { AuthContext } from "./Auth.js";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
+import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles((theme) => ({
   formBody: {
@@ -96,10 +96,15 @@ const Login = (props) => {
                   />
                 </Grid>
               ))}
-              <Grid container item md={12} direction="row-reverse">
-                <Button color="primary" variant="outlined" type="submit">
+              <Grid container item md={12} direction="row-reverse" justify="space-between">
+                <Button color="primary" variant="contained" type="submit">
                   Submit{" "}
                 </Button>
+                < Link href="/signup" >
+                <Button  color="primary" >
+                  Sign Up{" "}
+                </Button>
+</Link>
               </Grid>
             </Grid>
           </form>

@@ -30,6 +30,7 @@ export default function DenseTable(props) {
   const classes = useStyles();
   const userDetails = props.user?.toJSON();
   console.log(userDetails);
+  
 
   return (
     <Container maxwidth="lg">
@@ -37,7 +38,7 @@ export default function DenseTable(props) {
         <Table size="small" style={{width:"500px"}}>
         <TableHead>
           <TableRow>
-            <TableCell>User Information</TableCell>
+            <TableCell colSpan="2">User Information</TableCell>
           </TableRow>
         </TableHead>
           <TableRow>

@@ -12,17 +12,27 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
+import Paper from "@material-ui/core/Paper";
+import app from "./base.js";
 
 const useStyles = makeStyles((theme) => ({
   formBody: {
-    display: "flex",
-    flexFlow: "row",
-margin:"5px 0 15px 0"
+    display: "flex"
+    // minHeight: "100vh"
   },
   field: {
     padding: "10px"
   },
-formSpacing:{ marginTop:'2rem'}
+  header: {
+    backgroundColor: "#0c3c5a",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "0.5rem",
+    color: "#FFF",
+    marginBottom: "1rem"
+  },
+  formSpacing: { marginTop: "2rem" }
 }));
 const Fields = [
   {
@@ -75,279 +85,322 @@ export default function BasicTextFields() {
 
     setNiche(newNiche);
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-  console.log(values);
+  const handleSubmit = React.useCallback(async (event) => {
+    const red = app.firestore().collection("business");
+
+    try {
+      await red.add(values)
+      red.onSnapshot((querySnapShot) => {
+        const items = [];
+        querySnapShot.forEach((doc) => {
+          items.push(doc.data());
+        });
+        console.log({ items });
+      });
+    } catch (error) {
+      alert(error);
+    }
+  }, []);
+
   return (
     <Container maxWidth="md">
-      <Typography variant="h3"> Sign up as a Producer</Typography>
-      <form
-        noValidate
-        autoComplete="off"
+      <Grid
+        container
         className={classes.formBody}
-        onSubmit={handleSubmit}
+        justify="center"
+        alignItems="center"
       >
-        <Grid container spacing={4}>
-          {Fields.map((field) => (
-            <Grid item md={8}>
-              <TextField
-                required={field?.required}
-                name={field.name}
-                label={field.label}
-                type={field?.type}
-                fullWidth
-                onChange={handleChange}
-              />
-            </Grid>
-          ))}
-          <Grid container item md={8} direction="row-reverse">
-            <Grid item md={12}>
-              <TextField
-                required
-                name="experience"
-                label={"How many Years have you been in business"}
-                fullWidth
-                onChange={handleChange}
-              />
-            </Grid>
-            {/* What product category do yoiu operate in? (Check all that
-                  apply)? */}
-            <Grid item md={12} className={classes.formSpacing}>
-              <FormControl component="fieldset" className={classes.formControl}>
-                <FormLabel component="legend">
-                  What product category do yoiu operate in? (Check all that
-                  apply)?
-                </FormLabel>
-                <Grid component={FormGroup} container sm={12} style={{flexFlow: "row", flexWrap: "wrap"}} >
-                  {niche.map((n, idx) => (
-                    <Grid
-                      component={FormControlLabel}
-                      style={{marginRight: 0}}
-                      item
-                      sm={6}
-                      id={idx}
-                      control={
-                        <Checkbox
-                          value={nichen[n]}
-                          checked={nichen[n]}
-                          onChange={handleNiche}
-                          name={n}
-                        />
-                      }
-                      label={n}
-                    />
-                  ))}
-                </Grid>
-              </FormControl>
-            </Grid>
-
-            <Grid item md={12} className={classes.formSpacing}>
-              <TextField
-                required
-                name="Craft_technique"
-                label={"What crafts and techniques do you work in?"}
-                fullWidth
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item md={12} className={classes.formSpacing}>
-              <FormControl component="fieldset">
-                {/* Are you a  */}
-                <FormLabel component="legend">Are you a </FormLabel>
-                <RadioGroup
-                  className={classes.formBody}
-                  aria-label="Wholesale_retailer"
-                  name="Wholesale_retailer"
-                  value={values["Wholesale_retailer"]||''}
-                  onChange={handleChange}
-                >
-                  <FormControlLabel
-                    value="Wholesale Producer"
-                    control={<Radio />}
-                    label="Wholesale Producer"
-                  />
-                  <FormControlLabel
-                    value="Retailer"
-                    control={<Radio />}
-                    label="Retailer"
-                  />
-                  <FormControlLabel
-                    value="Both"
-                    control={<Radio />}
-                    label="Both"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-
-            {values?.Wholesale_retailer && values?.Wholesale_retailer !== 'Wholesale Producer' && <Grid item md={12}>
-              <FormControl component="fieldset">
-                {/* Are you a /an */}
-                <FormLabel component="legend">Are you a /an</FormLabel>
-                <RadioGroup
-                  className={classes.formBody}
-                  aria-label="scale"
-                  name="scale"
-                  value={values["scale"] || ''}
-                  onChange={handleChange}
-                >
-                  <FormControlLabel
-                    value="Independent Designer"
-                    control={<Radio />}
-                    label="Independent Designer"
-                  />
-                  <FormControlLabel
-                    value="Small scale retailer"
-                    control={<Radio />}
-                    label="Small scale retailer"
-                  />
-                  <FormControlLabel
-                    value="Large Scale retailer"
-                    control={<Radio />}
-                    label="Large Scale retailer"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Grid>}
-            {/* Do you have in-house designer or design team */}
-
-            <Grid container item md={12} direction="column">
-              <FormControl component="fieldset">
-                <FormLabel component="legend">
-                  Do you have in-house designer or design team{" "}
-                </FormLabel>
-                <RadioGroup
-                  className={classes.formBody}
-                  aria-label="Design"
-                  name="in_house_design_team"
-                  value={values["in_house_design_team"]}
-                  onChange={handleChange}
-                >
-                  <FormControlLabel
-                    value="Yes"
-                    control={<Radio />}
-                    label="Yes"
-                  />
-                  <FormControlLabel value="No" control={<Radio />} label="No" />
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-            {/* Is your manufacturing done in-house or is it out sourced */}
-            <Grid item md={12}>
-              <FormControl component="fieldset">
-                <FormLabel component="legend">
-                  Is your manufacturing done in-house or is it out sourced?{" "}
-                </FormLabel>
-                <RadioGroup
-                  className={classes.formBody}
-                  aria-label="Design"
-                  name="Manufacturing"
-                  value={values["Manufacturing"]}
-                  onChange={handleChange}
-                >
-                  <FormControlLabel
-                    value="In-house"
-                    control={<Radio />}
-                    label="In-house"
-                  />
-                  <FormControlLabel
-                    value="Outsourced"
-                    control={<Radio />}
-                    label="Outsourced"
-                  />
-                  <FormControlLabel
-                    value="Both"
-                    control={<Radio />}
-                    label="Both"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-          
-          {/* Export experience */}
-          <Grid container>
-            <Grid item>
-              <Grid item md={12}>
-                {/* Do you have experience exporting */}
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">
-                    Do you have experience exporting{" "}
-                  </FormLabel>
-                  <RadioGroup
-                    className={classes.formBody}
-                    aria-label=""
-                    name="Export_experience"
-                    value={values["Export_experience"]}
-                    onChange={handleChange}
-                  >
-                    <FormControlLabel
-                      value="Yes"
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value="No"
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-            </Grid>
-
-            {values?.Export_experience === "Yes" && (
-              <>
-                <Grid item sm={12}>
-                  <FormControl component="fieldset">
-                    {/* Are you a /an */}
-                    <FormLabel component="legend">Are you a </FormLabel>
-                    <RadioGroup
-                      className={classes.formBody}
-                      aria-label="scale"
-                      name="Exporter"
-                      value={values["Exporter"]}
-                      onChange={handleChange}
-                    >
-                      <FormControlLabel
-                        value="Mainstream Exporter"
-                        control={<Radio />}
-                        label="Mainstream Exporter"
-                      />
-                      <FormControlLabel
-                        value="Small scale Exporter"
-                        control={<Radio />}
-                        label="Small scale exporter"
-                      />
-                      <FormControlLabel
-                        value="Large Scale Exporter"
-                        control={<Radio />}
-                        label="Large Scale exporter"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
-                <Grid item sm={12}>
+        <Grid
+          conatiner
+          item
+          md="10"
+          sm="12"
+          justify="center"
+          component={Paper}
+          spacing="4"
+          style={{ padding: "20px" }}
+        >
+          <Paper className={classes.header} elevation="0">
+            <Typography variant="h6"> Sign up as a Producer</Typography>
+          </Paper>
+          <form autoComplete="off" onSubmit={handleSubmit}>
+            <Grid container spacing={4} justify="center" sm="12">
+              {Fields.map((field) => (
+                <Grid item sm={10}>
                   <TextField
-                    name="brands_exported"
-                    label={
-                      "Please share names of brands you have exported in the past"
-                    }
+                    required={field?.required}
+                    name={field.name}
+                    label={field.label}
+                    type={field?.type}
                     fullWidth
                     onChange={handleChange}
                   />
                 </Grid>
-              </>
-            )}
-          </Grid>
-          </Grid>
-          <Grid container item md={8} direction="row-reverse">
-            <Button color="primary" variant="outlined" type="submit">
-              Submit{" "}
-            </Button>
-          </Grid>
+              ))}
+              <Grid container item md={10} direction="row-reverse">
+                <Grid item md={12}>
+                  <TextField
+                    required
+                    name="experience"
+                    label={"How many Years have you been in business"}
+                    fullWidth
+                    onChange={handleChange}
+                  />
+                </Grid>
+                {/* What product category do yoiu operate in? (Check all that
+                  apply)? */}
+                <Grid item md={12} className={classes.formSpacing}>
+                  <FormControl
+                    component="fieldset"
+                    className={classes.formControl}
+                  >
+                    <FormLabel component="legend">
+                      What product category do yoiu operate in? (Check all that
+                      apply)?
+                    </FormLabel>
+                    <Grid
+                      component={FormGroup}
+                      container
+                      sm={12}
+                      style={{ flexFlow: "row", flexWrap: "wrap" }}
+                    >
+                      {niche.map((n, idx) => (
+                        <Grid
+                          component={FormControlLabel}
+                          style={{ marginRight: 0 }}
+                          item
+                          sm={6}
+                          id={idx}
+                          control={
+                            <Checkbox
+                              value={nichen[n]}
+                              checked={nichen[n]}
+                              onChange={handleNiche}
+                              name={n}
+                            />
+                          }
+                          label={n}
+                        />
+                      ))}
+                    </Grid>
+                  </FormControl>
+                </Grid>
+
+                <Grid item md={12} className={classes.formSpacing}>
+                  <TextField
+                    required
+                    name="Craft_technique"
+                    label={"What crafts and techniques do you work in?"}
+                    fullWidth
+                    onChange={handleChange}
+                  />
+                </Grid>
+                <Grid item md={12} className={classes.formSpacing}>
+                  <FormControl component="fieldset">
+                    {/* Are you a  */}
+                    <FormLabel component="legend">Are you a </FormLabel>
+                    <RadioGroup
+                      className={classes.formBody}
+                      aria-label="Wholesale_retailer"
+                      name="Wholesale_retailer"
+                      value={values["Wholesale_retailer"] || ""}
+                      onChange={handleChange}
+                    >
+                      <FormControlLabel
+                        value="Wholesale Producer"
+                        control={<Radio />}
+                        label="Wholesale Producer"
+                      />
+                      <FormControlLabel
+                        value="Retailer"
+                        control={<Radio />}
+                        label="Retailer"
+                      />
+                      <FormControlLabel
+                        value="Both"
+                        control={<Radio />}
+                        label="Both"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+
+                {values?.Wholesale_retailer &&
+                  values?.Wholesale_retailer !== "Wholesale Producer" && (
+                    <Grid item md={12}>
+                      <FormControl component="fieldset">
+                        {/* Are you a /an */}
+                        <FormLabel component="legend">Are you a /an</FormLabel>
+                        <RadioGroup
+                          className={classes.formBody}
+                          aria-label="scale"
+                          name="scale"
+                          value={values["scale"] || ""}
+                          onChange={handleChange}
+                        >
+                          <FormControlLabel
+                            value="Independent Designer"
+                            control={<Radio />}
+                            label="Independent Designer"
+                          />
+                          <FormControlLabel
+                            value="Small scale retailer"
+                            control={<Radio />}
+                            label="Small scale retailer"
+                          />
+                          <FormControlLabel
+                            value="Large Scale retailer"
+                            control={<Radio />}
+                            label="Large Scale retailer"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+                  )}
+                {/* Do you have in-house designer or design team */}
+
+                <Grid container item md={12} direction="column">
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">
+                      Do you have in-house designer or design team{" "}
+                    </FormLabel>
+                    <RadioGroup
+                      className={classes.formBody}
+                      aria-label="Design"
+                      name="in_house_design_team"
+                      value={values["in_house_design_team"]}
+                      onChange={handleChange}
+                    >
+                      <FormControlLabel
+                        value="Yes"
+                        control={<Radio />}
+                        label="Yes"
+                      />
+                      <FormControlLabel
+                        value="No"
+                        control={<Radio />}
+                        label="No"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                {/* Is your manufacturing done in-house or is it out sourced */}
+                <Grid item md={12}>
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">
+                      Is your manufacturing done in-house or is it out sourced?{" "}
+                    </FormLabel>
+                    <RadioGroup
+                      className={classes.formBody}
+                      aria-label="Design"
+                      name="Manufacturing"
+                      value={values["Manufacturing"]}
+                      onChange={handleChange}
+                    >
+                      <FormControlLabel
+                        value="In-house"
+                        control={<Radio />}
+                        label="In-house"
+                      />
+                      <FormControlLabel
+                        value="Outsourced"
+                        control={<Radio />}
+                        label="Outsourced"
+                      />
+                      <FormControlLabel
+                        value="Both"
+                        control={<Radio />}
+                        label="Both"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+
+                {/* Export experience */}
+                <Grid container>
+                  <Grid item>
+                    <Grid item md={12}>
+                      {/* Do you have experience exporting */}
+                      <FormControl component="fieldset">
+                        <FormLabel component="legend">
+                          Do you have experience exporting{" "}
+                        </FormLabel>
+                        <RadioGroup
+                          className={classes.formBody}
+                          aria-label=""
+                          name="Export_experience"
+                          value={values["Export_experience"]}
+                          onChange={handleChange}
+                        >
+                          <FormControlLabel
+                            value="Yes"
+                            control={<Radio />}
+                            label="Yes"
+                          />
+                          <FormControlLabel
+                            value="No"
+                            control={<Radio />}
+                            label="No"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+
+                  {values?.Export_experience === "Yes" && (
+                    <>
+                      <Grid item sm={12}>
+                        <FormControl component="fieldset">
+                          {/* Are you a /an */}
+                          <FormLabel component="legend">Are you a </FormLabel>
+                          <RadioGroup
+                            className={classes.formBody}
+                            aria-label="scale"
+                            name="Exporter"
+                            value={values["Exporter"]}
+                            onChange={handleChange}
+                          >
+                            <FormControlLabel
+                              value="Mainstream Exporter"
+                              control={<Radio />}
+                              label="Mainstream Exporter"
+                            />
+                            <FormControlLabel
+                              value="Small scale Exporter"
+                              control={<Radio />}
+                              label="Small scale exporter"
+                            />
+                            <FormControlLabel
+                              value="Large Scale Exporter"
+                              control={<Radio />}
+                              label="Large Scale exporter"
+                            />
+                          </RadioGroup>
+                        </FormControl>
+                      </Grid>
+                      <Grid item sm={12}>
+                        <TextField
+                          name="brands_exported"
+                          label={
+                            "Please share names of brands you have exported in the past"
+                          }
+                          fullWidth
+                          onChange={handleChange}
+                        />
+                      </Grid>
+                    </>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid container item md={8} direction="row-reverse">
+                <Button color="primary" variant="contained" type="submit">
+                  Submit{" "}
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
         </Grid>
-      </form>
+      </Grid>
     </Container>
   );
 }

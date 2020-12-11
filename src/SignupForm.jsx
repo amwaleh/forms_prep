@@ -5,15 +5,26 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 
 const useStyles = makeStyles((theme) => ({
   formBody: {
-    display: "flex"
+    display: "flex",
+    minHeight: "100vh"
   },
   field: {
     padding: "10px"
+  },
+  header: {
+    backgroundColor: "#0c3c5a",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "0.5rem",
+    color: "#FFF",
+    marginBottom: "1rem"
   }
 }));
 const Fields = [
@@ -70,55 +81,67 @@ export default function BasicTextFields() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-const {email, password} = values 
+    const { email, password } = values;
     firebase
-    .auth()
+      .auth()
       .createUserWithEmailAndPassword(email, password)
-      // .then(({ user }) => {
-      //   return user.getIdToken().then((idToken) => {
-      //     return fetch("/sessionLogin", {
-      //       method: "POST",
-      //       headers: {
-      //         Accept: "application/json",
-      //         "Content-Type": "application/json",
-      //         "CSRF-Token": Cookies.get("XSRF-TOKEN")
-      //       },
-      //       body: JSON.stringify({ idToken })
-      //     });
-      //   });
-      // })
-      .then((user) => {console.log(user)})
-      .catch(error => {console.log(error.message)})
-  }
+      .then((user) => {
+        console.log(user);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
   return (
     <Container maxWidth="md">
-      <Typography variant="subtitle1"> Sign up as a Producer</Typography>
-      <form
-        noValidate
-        autoComplete="off"
+      <Grid
+        container
         className={classes.formBody}
-        onSubmit={handleSubmit}
+        justify="center"
+        alignItems="center"
       >
-        <Grid container spacing={4}>
-          {Fields.map((field) => (
-            <Grid item md={8}>
-              <TextField
-                required={field?.required}
-                name={field.name}
-                label={field.label}
-                type={field?.type}
-                fullWidth
-                onChange={handleChange}
-              />
+        <Grid
+          conatiner
+          item
+          md="10"
+          sm="12"
+          justify="center"
+          component={Paper}
+          spacing="4"
+          style={{ padding: "20px" }}
+        >
+          <Paper className={classes.header} elevation="0">
+            <Typography variant="h6"> Sign up</Typography>
+          </Paper>
+
+          <form
+            noValidate
+            autoComplete="off"
+            className={classes.formBody}
+            onSubmit={handleSubmit}
+          >
+            <Grid container spacing={4} justify="center" >
+              {Fields.map((field) => (
+                <Grid item sm="12">
+                  <TextField
+                    required={field?.required}
+                    name={field.name}
+                    label={field.label}
+                    type={field?.type}
+                    fullWidth
+                    onChange={handleChange}
+                  />
+                </Grid>
+              ))}
+              <Grid container item md={8} direction="row-reverse">
+                <Button color="primary" variant="contained" type="submit">
+                  Submit{" "}
+                </Button>
+              </Grid>
             </Grid>
-          ))}
-          <Grid container item md={8} direction="row-reverse">
-            <Button color="primary" variant="outlined" type="submit">
-              Submit{" "}
-            </Button>
-          </Grid>
+          </form>
         </Grid>
-      </form>
+      </Grid>
     </Container>
   );
 }

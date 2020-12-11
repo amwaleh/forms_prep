@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Home from "./Home";
 import Login from "./Login";
 import Profile from "./Profile";
-import SignUp from "./SignupForm";
+import SignUp from "./BusinessRegistration";
 import { AuthProvider } from "./Auth";
 import PrivateRoute from "./PrivateRoute";
 
